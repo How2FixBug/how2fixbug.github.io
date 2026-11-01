@@ -228,10 +228,27 @@ body { color: var(--ink); font-family: "Nunito", Arial, sans-serif; }
 
 
 .quest-group {
-  margin-top: 26px;
+  display: block;
+  width: 100%;
+  margin-top: 30px;
 }
 .quest-group:first-child {
   margin-top: 0;
+}
+/* Keep every quest in a single full-width vertical stack. */
+.quest-group-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+  width: 100%;
+}
+.quest-group-grid > .quest-card {
+  display: flex;
+  width: 100%;
+  max-width: none;
+  min-height: 0;
+  margin: 0;
 }
 .quest-group-heading {
   margin: 0 0 12px;
