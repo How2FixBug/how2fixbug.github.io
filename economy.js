@@ -230,6 +230,7 @@
         state.lifetimeEarned += quest.reward;
         save();
         updateQuestCards();
+        renderShop();
         renderAchievements();
       });
 
