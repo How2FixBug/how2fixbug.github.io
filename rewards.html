@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BugBucks | How2FixBug</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/rewards.css">
+    <script src="/economy.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a href="/" class="logo">How2FixBug</a>
+      <nav class="topbar-links">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/rewards.html">Rewards</a>
+      </nav>
+      <div class="topbar-stats">
+        <span id="bugbucks-balance">0 BB</span>
+      </div>
+    </header>
+
+    <main class="rewards-page">
+      <section class="rewards-hero">
+        <p class="eyebrow">THE HOW2FIXBUG ECONOMY</p>
+        <h1>BugBucks</h1>
+        <p>Complete quests, earn BB, and collect little extras.</p>
+        <div class="wallet"><span>Your wallet</span><strong id="wallet-balance">0 BB</strong></div>
+      </section>
+
+      <section class="rewards-section">
+        <div class="section-heading"><div><p class="eyebrow">EARN CURRENCY</p><h2>Quests</h2></div><span>Claim rewards when they're ready.</span></div>
+        <div id="quest-list" class="card-grid">Loading quests...</div>
+      </section>
+
+      <section class="rewards-section">
+        <div class="section-heading"><div><p class="eyebrow">SPEND YOUR BB</p><h2>Shop</h2></div><span>Items stay in your browser inventory.</span></div>
+        <div id="shop-list" class="card-grid">Loading shop...</div>
+      </section>
+
+      <section class="rewards-section">
+        <div class="section-heading"><div><p class="eyebrow">MILESTONES</p><h2>Achievements</h2></div></div>
+        <div id="achievement-list" class="card-grid">Loading achievements...</div>
+      </section>
+      <p class="fine-print">BugBucks are virtual points with no cash value. Your balance and progress are saved in this browser only.</p>
+    </main>
+    <script>
+      const walletObserver = new MutationObserver(() => {
+        const balance = document.getElementById("bugbucks-balance");
+        if (balance) document.getElementById("wallet-balance").textContent = balance.textContent;
+      });
+      walletObserver.observe(document.body, { childList: true, subtree: true, characterData: true });
+    </script>
+  </body>
+</html>
