@@ -329,12 +329,13 @@
 
           card.append(top, heading, description, progressLine, progressTrack, reward, button);
           grid.append(card);
-          updateQuestCard(quest);
         });
 
         section.append(grid);
       }
       container.append(section);
+      // Update only after the cards are in the document, so their progress and buttons can be found.
+      groupQuests.forEach(updateQuestCard);
     });
   }
 
