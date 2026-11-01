@@ -26,6 +26,9 @@
   let renderTimer = null;
 
   function save() {
+    quests.forEach(quest => {
+      if (quest.type === "lifetime_earned") setProgress(quest, state.lifetimeEarned);
+    });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     updateBalance();
   }
