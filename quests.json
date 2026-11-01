@@ -1,0 +1,125 @@
+{
+  "currency": {
+    "name": "BugBucks",
+    "symbol": "BB"
+  },
+  "quests": [
+    {
+      "id": "visit-home",
+      "title": "Home sweet home",
+      "description": "Visit the homepage.",
+      "type": "visit_page",
+      "page": "home",
+      "target": 1,
+      "reward": 5,
+      "frequency": "daily"
+    },
+    {
+      "id": "visit-about",
+      "title": "Get to know the creator",
+      "description": "Open the About page.",
+      "type": "visit_page",
+      "page": "about",
+      "target": 1,
+      "reward": 5,
+      "frequency": "daily"
+    },
+    {
+      "id": "visit-rewards",
+      "title": "Check the reward station",
+      "description": "Visit the Rewards page.",
+      "type": "visit_page",
+      "page": "rewards",
+      "target": 1,
+      "reward": 5,
+      "frequency": "daily"
+    },
+    {
+      "id": "one-minute",
+      "title": "Take a look around",
+      "description": "Spend one active minute on the website.",
+      "type": "time_on_site",
+      "target": 60,
+      "reward": 10,
+      "frequency": "daily"
+    },
+    {
+      "id": "three-minutes",
+      "title": "Explore a little more",
+      "description": "Spend three active minutes on the website.",
+      "type": "time_on_site",
+      "target": 180,
+      "reward": 20,
+      "frequency": "daily"
+    },
+    {
+      "id": "tour-the-site",
+      "title": "Full site tour",
+      "description": "Visit Home, About, and Rewards in one day.",
+      "type": "visit_pages",
+      "pages": ["home", "about", "rewards"],
+      "target": 3,
+      "reward": 15,
+      "frequency": "daily"
+    },
+    {
+      "id": "click-about",
+      "title": "Use the navigation",
+      "description": "Click a link that takes you to the About page.",
+      "type": "click_link",
+      "page": "about",
+      "target": 1,
+      "reward": 5,
+      "frequency": "daily"
+    },
+    {
+      "id": "first-earnings",
+      "title": "First earnings",
+      "description": "Earn at least 25 BugBucks in total.",
+      "type": "lifetime_earned",
+      "target": 25,
+      "reward": 10,
+      "frequency": "once"
+    }
+  ],
+  "shop": [
+    {
+      "id": "blue-name",
+      "name": "Blue name tag",
+      "description": "A little blue flair for your account.",
+      "price": 25
+    },
+    {
+      "id": "bug-hunter",
+      "name": "Bug Hunter title",
+      "description": "A title for dedicated site explorers.",
+      "price": 50
+    },
+    {
+      "id": "golden-bug",
+      "name": "Golden Bug badge",
+      "description": "A shiny badge for your collection.",
+      "price": 100
+    }
+  ],
+  "achievements": [
+    {
+      "id": "earn-25",
+      "name": "Pocket Change",
+      "description": "Earn 25 BugBucks in total.",
+      "totalEarned": 25
+    },
+    {
+      "id": "earn-100",
+      "name": "BugBucks Collector",
+      "description": "Earn 100 BugBucks in total.",
+      "totalEarned": 100
+    },
+    {
+      "id": "earn-500",
+      "name": "Economy Expert",
+      "description": "Earn 500 BugBucks in total.",
+      "totalEarned": 500
+    }
+  ]
+}
