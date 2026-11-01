@@ -235,7 +235,11 @@ body { color: var(--ink); font-family: "Nunito", Arial, sans-serif; }
 .quest-group:first-child {
   margin-top: 0;
 }
-/* Keep every quest in a single full-width vertical stack. */
+/* The outer quest list stacks sections; each section gets its own four-column grid. */
+#quest-list.card-grid {
+  display: block;
+  width: 100%;
+}
 .quest-group-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
