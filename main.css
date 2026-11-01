@@ -66,3 +66,20 @@ html, body {
 	font-size: 25px;
 }
 
+.topbar-stats {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  color: #ffffff;
+  font-family: "Fredoka One", sans-serif;
+  white-space: nowrap;
+}
+.topbar-stats p { font-size: 16px; }
+#bugbucks-balance { font-size: 16px; }
+@media (max-width: 650px) {
+  .topbar { padding: 0 10px; }
+  .logo { font-size: 18px; }
+  .topbar-links { gap: 10px; }
+  .topbar-links a, .topbar-stats { font-size: 12px; }
+  .topbar-stats p { display: none; }
+}
