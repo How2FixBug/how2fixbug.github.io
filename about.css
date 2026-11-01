@@ -83,3 +83,17 @@ html, body {
   .topbar-links a, .topbar-stats { font-size: 12px; }
   .topbar-stats p { display: none; }
 }
+
+/* Keep the asynchronously loaded view count centered without moving the other header items. */
+#view-count {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  color: #ffffff;
+  font-family: "Fredoka One", sans-serif;
+  font-size: 16px;
+  white-space: nowrap;
+  pointer-events: none;
+}
