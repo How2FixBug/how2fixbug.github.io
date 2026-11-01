@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Earn BugBucks by exploring How2FixBug, then spend them on rewards.">
     <title>BugBucks | How2FixBug</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/main.css">
     <link rel="stylesheet" href="/rewards.css">
     <script src="/economy.js" defer></script>
@@ -10,10 +13,10 @@
   <body>
     <header class="topbar">
       <a href="/" class="logo">How2FixBug</a>
-      <nav class="topbar-links">
+      <nav class="topbar-links" aria-label="Main navigation">
         <a href="/">Home</a>
         <a href="/about">About</a>
-        <a href="/rewards.html">Rewards</a>
+        <a href="/rewards" aria-current="page">Rewards</a>
       </nav>
       <p id="view-count">Loading views...</p>
       <div class="topbar-stats">
@@ -22,28 +25,65 @@
     </header>
 
     <main class="rewards-page">
-      <header class="rewards-header">
-        <h1>BugBucks</h1>
-        <p>Earn them around the site. Spend them here.</p>
-        <div class="wallet-line">Wallet: <strong id="wallet-balance">0 BB</strong></div>
-      </header>
-
-      <section class="rewards-section">
-        <h2>Quests</h2>
-        <div id="quest-list" class="card-grid">Loading quests...</div>
+      <section class="rewards-hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <span class="eyebrow">THE SITE REWARD SYSTEM</span>
+          <h1 id="page-title">BugBucks</h1>
+          <p>Explore the site, finish little quests, and spend what you earn.</p>
+        </div>
+        <div class="wallet-card">
+          <span class="wallet-label">YOUR WALLET</span>
+          <strong id="wallet-balance">0 BB</strong>
+          <span class="wallet-hint">Your balance is saved in this browser.</span>
+        </div>
       </section>
 
-      <section class="rewards-section">
-        <h2>Shop</h2>
-        <div id="shop-list" class="card-grid">Loading shop...</div>
+      <nav class="section-jump" aria-label="Rewards sections">
+        <a href="#quests"><span>01</span> Quests</a>
+        <a href="#shop"><span>02</span> Shop</a>
+        <a href="#achievements"><span>03</span> Achievements</a>
+      </nav>
+
+      <section class="rewards-section" id="quests">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">EARN BUGBUCKS</span>
+            <h2>Quests</h2>
+            <p>Complete a quest, then press its claim button to collect your BB.</p>
+          </div>
+          <span class="section-count">REPEATABLE + ONE-TIME</span>
+        </div>
+        <div id="quest-list" class="card-grid" aria-live="polite">Loading quests...</div>
       </section>
 
-      <section class="rewards-section">
-        <h2>Achievements</h2>
-        <div id="achievement-list" class="card-grid">Loading achievements...</div>
+      <section class="rewards-section" id="shop">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">SPEND YOUR EARNINGS</span>
+            <h2>Shop</h2>
+            <p>Buy an item once, then equip it whenever you like.</p>
+          </div>
+          <span class="section-count">YOUR ITEMS</span>
+        </div>
+        <div id="shop-list" class="card-grid" aria-live="polite">Loading shop...</div>
       </section>
 
-      <p class="fine-print">BugBucks are site points, not real money. Your balance is saved in this browser.</p>
+      <section class="rewards-section" id="achievements">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">MILESTONES</span>
+            <h2>Achievements</h2>
+            <p>These unlock automatically as your lifetime earnings grow.</p>
+          </div>
+          <span class="section-count">LIFETIME TOTAL</span>
+        </div>
+        <div id="achievement-list" class="card-grid" aria-live="polite">Loading achievements...</div>
+      </section>
+
+      <footer class="rewards-footer">
+        <span class="footer-mark">H2FB</span>
+        <p>BugBucks are just site points — they have no real-money value. Your progress is stored in this browser, so it won't automatically sync to other devices.</p>
+      </footer>
     </main>
 
     <script data-goatcounter="https://how2fixbug.goatcounter.com/count"
