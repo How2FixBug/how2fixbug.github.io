@@ -290,9 +290,6 @@
 
           const top = document.createElement("div");
           top.className = "quest-card-top";
-          const frequency = document.createElement("span");
-          frequency.className = "quest-frequency";
-          frequency.textContent = group.title.toUpperCase();
           const stateLabel = document.createElement("span");
           stateLabel.dataset.questState = "";
           const heading = document.createElement("h3");
@@ -314,7 +311,7 @@
           progressFill.dataset.progressFill = "";
           progressTrack.append(progressFill);
           progressLine.append(progress);
-          top.append(frequency, stateLabel);
+          top.append(stateLabel);
           const reward = document.createElement("strong");
           reward.className = "quest-reward";
           reward.textContent = "+" + quest.reward + " BB";
