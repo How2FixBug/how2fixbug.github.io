@@ -123,3 +123,19 @@ html, body {
     font-size: 10px;
   }
 }
+
+
+.player-name-tag--blue {
+  background: #087be8;
+  color: #ffffff;
+}
+.player-name-tag--hunter {
+  background: #174b35;
+  color: #ffffff;
+}
+.player-name-tag--golden {
+  background: #f4c542;
+  border-color: #9b7410;
+  color: #493400;
+  font-style: italic;
+}
