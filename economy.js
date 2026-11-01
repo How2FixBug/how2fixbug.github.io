@@ -81,6 +81,18 @@
     });
   }
 
+  function updateCosmetics() {
+    document.querySelectorAll(".player-name-tag").forEach(tag => tag.remove());
+    if (state.activeItem !== "blue-name") return;
+    const logo = document.querySelector(".topbar .logo");
+    if (!logo) return;
+    const tag = document.createElement("span");
+    tag.className = "player-name-tag";
+    tag.textContent = "Roger";
+    tag.setAttribute("aria-label", "Equipped blue name tag");
+    logo.insertAdjacentElement("afterend", tag);
+  }
+
   function bucketFor(quest) {
     return quest.frequency === "once" ? state.once : state.daily;
   }
@@ -301,6 +313,7 @@
         }
         state.activeItem = item.id;
         save();
+        updateCosmetics();
         renderShop();
       });
       top.append(status);
@@ -338,6 +351,7 @@
 
   async function init() {
     updateBalance();
+    updateCosmetics();
     try {
       const response = await fetch("/quests.json");
       if (!response.ok) throw new Error("Could not load quests.json");
