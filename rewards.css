@@ -225,3 +225,27 @@ body { color: var(--ink); font-family: "Nunito", Arial, sans-serif; }
   color: #493400;
   font-style: italic;
 }
+
+
+.quest-group {
+  margin-top: 26px;
+}
+.quest-group:first-child {
+  margin-top: 0;
+}
+.quest-group-heading {
+  margin: 0 0 12px;
+  padding-bottom: 7px;
+  border-bottom: 2px solid #174b78;
+  color: #174b78;
+  font: 25px/1.2 "Fredoka One", sans-serif;
+}
+.quest-group-empty {
+  margin: 0;
+  padding: 14px 16px;
+  border: 2px dashed #8fb6d7;
+  border-radius: 8px;
+  color: #55728b;
+  background: #eaf4ff;
+  font-size: 14px;
+}
