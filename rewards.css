@@ -1,12 +1,24 @@
+:root {
+  --blue: #1687e8;
+  --blue-dark: #07579d;
+  --ink: #153b5d;
+  --muted: #63809a;
+  --line: #d5e8f8;
+  --surface: #ffffff;
+  --surface-blue: #f1f8ff;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
 body {
-  color: #17416b;
-  font-family: "Fredoka One", sans-serif;
+  color: var(--ink);
+  font-family: "Nunito", Arial, sans-serif;
 }
 
-.topbar-links {
-  margin-left: auto;
-}
-
+.topbar-links { margin-left: auto; }
 .topbar-stats {
   display: flex;
   align-items: center;
@@ -15,169 +27,267 @@ body {
   font-family: "Fredoka One", sans-serif;
   white-space: nowrap;
 }
-
-#bugbucks-balance {
-  font-size: 16px;
-}
+#bugbucks-balance { font-size: 16px; }
 
 .rewards-page {
-  width: min(1050px, calc(100% - 32px));
-  margin: 34px auto 70px;
+  width: min(1080px, calc(100% - 40px));
+  margin: 42px auto 72px;
 }
 
-.rewards-header {
-  text-align: center;
-  padding: 12px 12px 24px;
-  color: #fff;
+.rewards-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: clamp(25px, 5vw, 48px);
+  border: 1px solid rgba(255,255,255,.9);
+  border-radius: 24px;
+  background: linear-gradient(120deg, #ffffff 0%, #f0f8ff 65%, #dceeff 100%);
+  box-shadow: 0 12px 35px rgba(29, 91, 145, .12);
 }
 
-.rewards-header h1 {
-  font-size: clamp(42px, 7vw, 64px);
-  line-height: 1.1;
-  margin: 0 0 8px;
-}
-
-.rewards-header > p {
-  font-size: 19px;
-}
-
-.wallet-line {
+.hero-copy { max-width: 590px; }
+.eyebrow {
   display: inline-block;
-  margin-top: 16px;
-  padding: 8px 18px;
-  background: #fff;
-  border: 2px solid #000;
-  color: #17416b;
-  font-size: 18px;
+  color: var(--blue-dark);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+.hero-copy h1 {
+  margin: 7px 0 8px;
+  color: var(--blue-dark);
+  font: 54px/1.05 "Fredoka One", sans-serif;
+}
+.hero-copy p {
+  max-width: 460px;
+  color: #4f6f8b;
+  font-size: 17px;
+  line-height: 1.55;
 }
 
-.wallet-line strong {
-  margin-left: 6px;
-  font-size: 23px;
-}
-
-.rewards-section {
-  margin-top: 30px;
-}
-
-.rewards-section h2 {
+.wallet-card {
+  flex: 0 0 235px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 22px;
+  border-radius: 18px;
+  background: #147ed2;
   color: #fff;
-  font-size: 32px;
-  margin-bottom: 12px;
-  text-shadow: 1px 1px #17416b;
+  box-shadow: 0 8px 20px rgba(20, 126, 210, .2);
+}
+.wallet-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  opacity: .85;
+}
+.wallet-card strong {
+  font: 37px/1.15 "Fredoka One", sans-serif;
+}
+.wallet-hint { font-size: 12px; opacity: .85; line-height: 1.4; }
+
+.section-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 22px 0 48px;
+}
+.section-jump a {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 16px;
+  border: 1px solid rgba(255,255,255,.85);
+  border-radius: 999px;
+  background: rgba(255,255,255,.7);
+  color: var(--blue-dark);
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: background .15s ease, transform .15s ease;
+}
+.section-jump a:hover { background: #fff; transform: translateY(-2px); }
+.section-jump a span { color: #79a8d0; font-size: 11px; }
+
+.rewards-section { margin-top: 48px; }
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 17px;
+}
+.section-heading h2 {
+  margin: 3px 0 4px;
+  color: #fff;
+  font: 34px/1.15 "Fredoka One", sans-serif;
+  text-shadow: 0 2px 5px rgba(21, 76, 125, .18);
+}
+.section-heading p {
+  color: #244f76;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.section-count {
+  flex-shrink: 0;
+  margin-bottom: 5px;
+  padding: 7px 11px;
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 999px;
+  color: #245b8a;
+  background: rgba(255,255,255,.45);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .8px;
 }
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 245px), 1fr));
+  gap: 15px;
 }
-
-.quest-card,
-.shop-card,
-.achievement-card {
+.quest-card, .shop-card, .achievement-card {
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 9px;
-  padding: 16px;
-  background: #eaf4ff;
-  border: 2px solid #000;
+  align-items: stretch;
+  gap: 11px;
+  padding: 19px;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: var(--surface);
+  box-shadow: 0 5px 17px rgba(27, 83, 130, .07);
+  transition: transform .16s ease, box-shadow .16s ease;
 }
-
-.quest-card h3,
-.shop-card h3,
-.achievement-card h3 {
-  color: #17416b;
-  font-size: 21px;
+.quest-card:hover, .shop-card:hover, .achievement-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(27, 83, 130, .11);
 }
-
-.quest-card p,
-.shop-card p,
-.achievement-card p {
-  font-family: Arial, sans-serif;
-  line-height: 1.45;
+.quest-card-top, .shop-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
 }
-
-.quest-progress {
-  color: #2875b9;
+.quest-frequency, .quest-state, .shop-status, .achievement-status {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #edf6ff;
+  color: #3976a9;
+  font-size: 11px;
+  font-weight: 800;
+}
+.quest-state.ready, .shop-status.owned, .achievement-status.unlocked {
+  background: #e5f7ef;
+  color: #19784e;
+}
+.quest-state.claimed, .shop-status.equipped {
+  background: #e9efff;
+  color: #405fa9;
+}
+.quest-card h3, .shop-card h3, .achievement-card h3 {
+  color: #16466f;
+  font: 21px/1.2 "Fredoka One", sans-serif;
+}
+.quest-card p, .shop-card p, .achievement-card p {
+  color: #5b748a;
   font-size: 14px;
+  line-height: 1.5;
 }
-
-.quest-reward,
-.shop-price {
-  color: #1673c5;
-  font-size: 19px;
+.quest-progress-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: #67839b;
+  font-size: 12px;
+  font-weight: 800;
 }
-
-button {
+.progress-track {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #e8f1f8;
+}
+.progress-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #54b6ff, #1687e8);
+  transition: width .2s ease;
+}
+.quest-reward, .shop-price {
+  color: var(--blue-dark);
+  font: 20px "Fredoka One", sans-serif;
+}
+.quest-card button, .shop-card button {
+  width: 100%;
+  min-height: 41px;
   margin-top: auto;
-  padding: 9px 15px;
-  border: 2px solid #000;
-  background: #4da6ff;
+  padding: 9px 14px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--blue);
   color: #fff;
   font: 16px "Fredoka One", sans-serif;
   cursor: pointer;
+  transition: background .15s ease, transform .15s ease;
 }
-
-button:hover:not(:disabled) {
-  background: #1673c5;
+.quest-card button:hover:not(:disabled), .shop-card button:hover:not(:disabled) {
+  background: var(--blue-dark);
+  transform: translateY(-1px);
 }
+.quest-card button:disabled, .shop-card button:disabled {
+  background: #e5edf4;
+  color: #7890a5;
+  cursor: default;
+}
+.quest-card.is-ready { border-color: #8bd8b2; }
+.quest-card.is-claimed { background: #f8fbfd; }
+.achievement-card { gap: 10px; }
+.achievement-card.locked { opacity: .78; }
+.achievement-card.unlocked { border-color: #9bd9bb; }
+.achievement-card .progress-track { margin-top: 2px; }
 
-button:disabled {
-  background: #aabed2;
+.rewards-footer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 55px;
+  padding: 18px 0;
+  border-top: 1px solid rgba(27, 83, 130, .18);
+}
+.footer-mark {
+  flex: 0 0 auto;
   color: #fff;
-  cursor: not-allowed;
+  font: 20px "Fredoka One", sans-serif;
+}
+.rewards-footer p {
+  color: #315d80;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
-.achievement-card {
-  border-left: 7px solid #aabed2;
+@media (max-width: 700px) {
+  .rewards-page { width: calc(100% - 24px); margin-top: 24px; }
+  .rewards-hero { align-items: stretch; flex-direction: column; gap: 20px; padding: 25px; }
+  .hero-copy h1 { font-size: 44px; }
+  .wallet-card { flex-basis: auto; }
+  .section-heading { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .section-heading h2 { font-size: 30px; }
+  .section-count { margin: 0; }
+  .section-jump { margin-bottom: 35px; }
 }
-
-.achievement-card.unlocked {
-  border-left-color: #1673c5;
-}
-
-.achievement-status {
-  color: #2875b9;
-  font-size: 14px;
-}
-
-.fine-print {
-  margin-top: 30px;
-  text-align: center;
-  color: #315b7f;
-  font: 13px Arial, sans-serif;
-}
-
-@media (max-width: 650px) {
-  .topbar {
-    padding: 0 10px;
-  }
-
-  .logo {
-    font-size: 18px;
-  }
-
-  .topbar-links {
-    gap: 10px;
-    margin-left: auto;
-  }
-
-  #view-count {
-    display: none;
-  }
-
-  .topbar-links a,
-  .topbar-stats {
-    font-size: 12px;
-  }
-
-  .rewards-page {
-    width: calc(100% - 20px);
-  }
-
-  .rewards-section h2 {
-    font-size: 27px;
-  }
+@media (max-width: 480px) {
+  .topbar { padding: 0 10px; }
+  .logo { font-size: 17px; }
+  .topbar-links { gap: 9px; }
+  .topbar-links a, .topbar-stats { font-size: 11px; }
+  #view-count { display: none; }
+  .rewards-footer { align-items: flex-start; }
 }
