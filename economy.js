@@ -54,7 +54,9 @@
         inventory: [],
         activeItem: "",
         once: { progress: {}, claimed: {}, visited: [] },
-        daily: freshDaily()
+        daily: freshDaily(),
+        weekly: freshPeriod("weekly"),
+        monthly: freshPeriod("monthly")
       };
     }
   }
@@ -168,14 +170,16 @@
 
   function recordPageVisit() {
     const page = currentPage();
-    if (!state.daily.visited.includes(page)) state.daily.visited.push(page);
-    if (!state.once.visited.includes(page)) state.once.visited.push(page);
+    ["daily", "weekly", "monthly", "once"].forEach(frequency => {
+      const bucket = frequency === "once" ? state.once : state[frequency];
+      if (!bucket.visited.includes(page)) bucket.visited.push(page);
+    });
 
     quests.forEach(quest => {
+      const bucket = bucketFor(quest);
       if (quest.type === "visit_page" && quest.page === page) setProgress(quest, 1);
       if (quest.type === "visit_pages") {
-        const visited = quest.frequency === "once" ? state.once.visited : state.daily.visited;
-        const count = quest.pages.filter(required => visited.includes(required)).length;
+        const count = quest.pages.filter(required => bucket.visited.includes(required)).length;
         setProgress(quest, count);
       }
     });
