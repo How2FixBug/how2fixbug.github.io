@@ -3,9 +3,14 @@ body {
   font-family: "Fredoka One", sans-serif;
 }
 
+.topbar-links {
+  margin-left: auto;
+}
+
 .topbar-stats {
   display: flex;
   align-items: center;
+  margin-left: 24px;
   color: #fff;
   font-family: "Fredoka One", sans-serif;
   white-space: nowrap;
@@ -22,12 +27,12 @@ body {
 
 .rewards-header {
   text-align: center;
-  padding: 18px 12px 28px;
+  padding: 12px 12px 24px;
   color: #fff;
 }
 
 .rewards-header h1 {
-  font-size: clamp(48px, 8vw, 76px);
+  font-size: clamp(42px, 7vw, 64px);
   line-height: 1.1;
   margin: 0 0 8px;
 }
@@ -38,11 +43,11 @@ body {
 
 .wallet-line {
   display: inline-block;
-  margin-top: 18px;
-  padding: 9px 20px;
-  background: #4da6ff;
+  margin-top: 16px;
+  padding: 8px 18px;
+  background: #fff;
   border: 2px solid #000;
-  color: #fff;
+  color: #17416b;
   font-size: 18px;
 }
 
@@ -75,8 +80,8 @@ body {
   flex-direction: column;
   align-items: flex-start;
   gap: 9px;
-  padding: 17px;
-  background: #fff;
+  padding: 16px;
+  background: #eaf4ff;
   border: 2px solid #000;
 }
 
@@ -156,6 +161,11 @@ button:disabled {
 
   .topbar-links {
     gap: 10px;
+    margin-left: auto;
+  }
+
+  #view-count {
+    display: none;
   }
 
   .topbar-links a,
