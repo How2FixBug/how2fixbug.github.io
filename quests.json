@@ -35,21 +35,22 @@
       "frequency": "daily"
     },
     {
+      "id": "click-about",
+      "title": "Curiosity",
+      "description": "Use a link to open the About page.",
+      "type": "click_link",
+      "page": "about",
+      "target": 1,
+      "reward": 5,
+      "frequency": "daily"
+    },
+    {
       "id": "one-minute",
       "title": "Hang around",
       "description": "Spend one active minute on the site.",
       "type": "time_on_site",
       "target": 60,
       "reward": 10,
-      "frequency": "daily"
-    },
-    {
-      "id": "three-minutes",
-      "title": "Still here?",
-      "description": "Spend three active minutes on the site.",
-      "type": "time_on_site",
-      "target": 180,
-      "reward": 20,
       "frequency": "daily"
     },
     {
@@ -67,13 +68,12 @@
       "frequency": "daily"
     },
     {
-      "id": "click-about",
-      "title": "Curiosity",
-      "description": "Use a link to open the About page.",
-      "type": "click_link",
-      "page": "about",
-      "target": 1,
-      "reward": 5,
+      "id": "three-minutes",
+      "title": "Still here?",
+      "description": "Spend three active minutes on the site.",
+      "type": "time_on_site",
+      "target": 180,
+      "reward": 20,
       "frequency": "daily"
     },
     {
