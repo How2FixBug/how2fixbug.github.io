@@ -1,0 +1,27 @@
+body { color: #17416b; font-family: "Fredoka One", sans-serif; }
+.topbar-stats { display: flex; align-items: center; gap: 18px; color: #fff; font-family: "Fredoka One", sans-serif; white-space: nowrap; }
+.topbar-stats p { font-size: 16px; }
+#bugbucks-balance { font-size: 16px; }
+.rewards-page { width: min(1050px, calc(100% - 32px)); margin: 34px auto 70px; }
+.rewards-hero { text-align: center; padding: 34px 20px; background: #eaf4ff; border: 3px solid #17416b; border-radius: 18px; box-shadow: 0 6px 0 #17416b; }
+.eyebrow { color: #2875b9; font-size: 12px; letter-spacing: 1.5px; }
+.rewards-hero h1 { color: #1673c5; font-size: clamp(42px, 8vw, 76px); margin: 4px 0; }
+.rewards-hero > p:not(.eyebrow) { font-size: 18px; }
+.wallet { display: inline-flex; flex-direction: column; gap: 2px; margin-top: 20px; padding: 12px 28px; border-radius: 14px; background: #4da6ff; color: #fff; }
+.wallet strong { font-size: 30px; }
+.rewards-section { margin-top: 42px; }
+.section-heading { display: flex; justify-content: space-between; align-items: end; gap: 12px; margin-bottom: 16px; }
+.section-heading h2 { color: #17416b; font-size: 34px; }
+.section-heading > span { font-size: 14px; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+.quest-card, .shop-card, .achievement-card { display: flex; flex-direction: column; align-items: flex-start; gap: 9px; padding: 18px; background: #fff; border: 2px solid #17416b; border-radius: 14px; box-shadow: 0 4px 0 #17416b; }
+.quest-card h3, .shop-card h3, .achievement-card h3 { font-size: 20px; }
+.quest-card p, .shop-card p, .achievement-card p { font-family: Arial, sans-serif; line-height: 1.45; }
+.quest-progress { color: #2875b9; font-size: 14px; }
+.quest-reward { color: #1673c5; font-size: 18px; }
+button { margin-top: auto; padding: 9px 15px; border: 2px solid #17416b; border-radius: 9px; background: #4da6ff; color: white; font: 16px "Fredoka One", sans-serif; cursor: pointer; }
+button:disabled { background: #aabed2; cursor: not-allowed; }
+.achievement-card { opacity: .55; }
+.achievement-card.unlocked { opacity: 1; background: #fff8d9; }
+.fine-print { margin-top: 34px; text-align: center; color: #315b7f; font: 13px Arial, sans-serif; }
+@media (max-width: 650px) { .topbar { padding: 0 10px; } .logo { font-size: 18px; } .topbar-links { gap: 10px; } .topbar-links a, .topbar-stats { font-size: 12px; } .topbar-stats p { display: none; } .section-heading { align-items: flex-start; flex-direction: column; } }
