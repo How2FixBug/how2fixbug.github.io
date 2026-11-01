@@ -21,35 +21,28 @@
     </header>
 
     <main class="rewards-page">
-      <section class="rewards-hero">
-        <p class="eyebrow">THE HOW2FIXBUG ECONOMY</p>
+      <header class="rewards-header">
         <h1>BugBucks</h1>
-        <p>Complete quests, earn BB, and collect little extras.</p>
-        <div class="wallet"><span>Your wallet</span><strong id="wallet-balance">0 BB</strong></div>
-      </section>
+        <p>Earn them around the site. Spend them here.</p>
+        <div class="wallet-line">Wallet: <strong id="wallet-balance">0 BB</strong></div>
+      </header>
 
       <section class="rewards-section">
-        <div class="section-heading"><div><p class="eyebrow">EARN CURRENCY</p><h2>Quests</h2></div><span>Claim rewards when they're ready.</span></div>
+        <h2>Quests</h2>
         <div id="quest-list" class="card-grid">Loading quests...</div>
       </section>
 
       <section class="rewards-section">
-        <div class="section-heading"><div><p class="eyebrow">SPEND YOUR BB</p><h2>Shop</h2></div><span>Items stay in your browser inventory.</span></div>
+        <h2>Shop</h2>
         <div id="shop-list" class="card-grid">Loading shop...</div>
       </section>
 
       <section class="rewards-section">
-        <div class="section-heading"><div><p class="eyebrow">MILESTONES</p><h2>Achievements</h2></div></div>
+        <h2>Achievements</h2>
         <div id="achievement-list" class="card-grid">Loading achievements...</div>
       </section>
-      <p class="fine-print">BugBucks are virtual points with no cash value. Your balance and progress are saved in this browser only.</p>
+
+      <p class="fine-print">BugBucks are site points, not real money. Your balance is saved in this browser.</p>
     </main>
-    <script>
-      const walletObserver = new MutationObserver(() => {
-        const balance = document.getElementById("bugbucks-balance");
-        if (balance) document.getElementById("wallet-balance").textContent = balance.textContent;
-      });
-      walletObserver.observe(document.body, { childList: true, subtree: true, characterData: true });
-    </script>
   </body>
 </html>
