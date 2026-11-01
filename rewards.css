@@ -237,8 +237,9 @@ body { color: var(--ink); font-family: "Nunito", Arial, sans-serif; }
 }
 /* Keep every quest in a single full-width vertical stack. */
 .quest-group-grid {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-flow: row;
   align-items: stretch;
   gap: 14px;
   width: 100%;
@@ -246,9 +247,19 @@ body { color: var(--ink); font-family: "Nunito", Arial, sans-serif; }
 .quest-group-grid > .quest-card {
   display: flex;
   width: 100%;
-  max-width: none;
+  min-width: 0;
   min-height: 0;
   margin: 0;
+}
+@media (max-width: 900px) {
+  .quest-group-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .quest-group-grid {
+    grid-template-columns: 1fr;
+  }
 }
 .quest-group-heading {
   margin: 0 0 12px;
