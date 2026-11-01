@@ -106,12 +106,20 @@
     const claimed = isClaimed(quest);
     const complete = progress >= quest.target;
     const progressText = card.querySelector("[data-quest-progress]");
+    const progressFill = card.querySelector("[data-progress-fill]");
+    const stateLabel = card.querySelector("[data-quest-state]");
     const button = card.querySelector("button");
     const shownProgress = quest.type === "time_on_site"
-      ? Math.min(progress, quest.target) + " / " + quest.target + " seconds"
+      ? Math.min(progress, quest.target) + " / " + quest.target + " sec"
       : Math.min(progress, quest.target) + " / " + quest.target;
-    progressText.textContent = claimed ? "Reward claimed" : shownProgress;
-    button.textContent = claimed ? "Claimed" : complete ? "Claim reward" : "In progress";
+    progressText.textContent = claimed ? "Reward collected" : shownProgress;
+    progressFill.style.width = Math.min(100, (progress / quest.target) * 100) + "%";
+    progressFill.parentElement.setAttribute("aria-valuenow", String(Math.min(progress, quest.target)));
+    stateLabel.textContent = claimed ? "Claimed" : complete ? "Ready to claim" : "In progress";
+    stateLabel.className = "quest-state" + (claimed ? " claimed" : complete ? " ready" : "");
+    card.classList.toggle("is-ready", complete && !claimed);
+    card.classList.toggle("is-claimed", claimed);
+    button.textContent = claimed ? "Collected" : complete ? "Claim +" + quest.reward + " BB" : "Keep going";
     button.disabled = !complete || claimed;
   }
 
@@ -212,13 +220,33 @@
       card.className = "quest-card";
       card.dataset.questId = quest.id;
 
+      const top = document.createElement("div");
+      top.className = "quest-card-top";
+      const frequency = document.createElement("span");
+      frequency.className = "quest-frequency";
+      frequency.textContent = quest.frequency === "once" ? "ONE-TIME" : "DAILY";
+      const stateLabel = document.createElement("span");
+      stateLabel.dataset.questState = "";
       const heading = document.createElement("h3");
       heading.textContent = quest.title;
       const description = document.createElement("p");
       description.textContent = quest.description;
-      const progress = document.createElement("p");
-      progress.className = "quest-progress";
+      const progressLine = document.createElement("div");
+      progressLine.className = "quest-progress-line";
+      const progress = document.createElement("span");
       progress.dataset.questProgress = "";
+      const progressTrack = document.createElement("div");
+      progressTrack.className = "progress-track";
+      progressTrack.setAttribute("role", "progressbar");
+      progressTrack.setAttribute("aria-label", quest.title + " progress");
+      progressTrack.setAttribute("aria-valuemin", "0");
+      progressTrack.setAttribute("aria-valuemax", String(quest.target));
+      const progressFill = document.createElement("span");
+      progressFill.className = "progress-fill";
+      progressFill.dataset.progressFill = "";
+      progressTrack.append(progressFill);
+      progressLine.append(progress);
+      top.append(frequency, stateLabel);
       const reward = document.createElement("strong");
       reward.className = "quest-reward";
       reward.textContent = "+" + quest.reward + " BB";
@@ -234,7 +262,7 @@
         renderAchievements();
       });
 
-      card.append(heading, description, progress, reward, button);
+      card.append(top, heading, description, progressLine, progressTrack, reward, button);
       container.append(card);
       updateQuestCard(quest);
     });
@@ -250,6 +278,11 @@
       const active = state.activeItem === item.id;
       const card = document.createElement("article");
       card.className = "shop-card";
+      const top = document.createElement("div");
+      top.className = "shop-card-top";
+      const status = document.createElement("span");
+      status.className = "shop-status" + (active ? " equipped" : owned ? " owned" : "");
+      status.textContent = active ? "Equipped" : owned ? "Owned" : "IN THE SHOP";
       const heading = document.createElement("h3");
       heading.textContent = item.name;
       const description = document.createElement("p");
@@ -258,7 +291,7 @@
       price.className = "shop-price";
       price.textContent = item.price + " BB";
       const button = document.createElement("button");
-      button.textContent = active ? "Equipped" : owned ? "Equip" : "Buy";
+      button.textContent = active ? "Currently equipped" : owned ? "Equip item" : "Buy for " + item.price + " BB";
       button.disabled = active || (!owned && state.balance < item.price);
       button.addEventListener("click", () => {
         if (!state.inventory.includes(item.id)) {
@@ -270,7 +303,8 @@
         save();
         renderShop();
       });
-      card.append(heading, description, price, button);
+      top.append(status);
+      card.append(top, heading, description, price, button);
       container.append(card);
     });
   }
@@ -289,9 +323,15 @@
       const description = document.createElement("p");
       description.textContent = item.description;
       const status = document.createElement("span");
-      status.className = "achievement-status";
-      status.textContent = unlocked ? "Unlocked" : item.totalEarned + " BB earned";
-      card.append(heading, description, status);
+      status.className = "achievement-status" + (unlocked ? " unlocked" : "");
+      status.textContent = unlocked ? "Unlocked" : item.totalEarned + " BB lifetime goal";
+      const progressTrack = document.createElement("div");
+      progressTrack.className = "progress-track";
+      const progressFill = document.createElement("span");
+      progressFill.className = "progress-fill";
+      progressFill.style.width = Math.min(100, (state.lifetimeEarned / item.totalEarned) * 100) + "%";
+      progressTrack.append(progressFill);
+      card.append(heading, description, status, progressTrack);
       container.append(card);
     });
   }
