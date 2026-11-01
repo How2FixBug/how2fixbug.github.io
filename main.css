@@ -50,5 +50,6 @@ html, body {
 #hello-text {
 	color: #ffffff;
 	text-align: center;
-	font-size: 100px
+	font-size: 100px;
+	font-family: "Fredoka One", sans-serif;
 }
