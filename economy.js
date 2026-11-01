@@ -9,7 +9,22 @@
     return year + "-" + month + "-" + day;
   }
 
-  const freshDaily = () => ({ date: localDateKey(), progress: {}, claimed: {}, visited: [] });
+  function periodKey(frequency) {
+    const now = new Date();
+    if (frequency === "weekly") {
+      const date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const day = (date.getDay() + 6) % 7;
+      date.setDate(date.getDate() - day);
+      return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0");
+    }
+    if (frequency === "monthly") {
+      return now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0");
+    }
+    return localDateKey();
+  }
+
+  const freshPeriod = frequency => ({ date: periodKey(frequency), progress: {}, claimed: {}, visited: [] });
+  const freshDaily = () => freshPeriod("daily");
 
   function loadState() {
     try {
@@ -23,10 +38,14 @@
       state.once.progress = state.once.progress || {};
       state.once.claimed = state.once.claimed || {};
       state.once.visited = Array.isArray(state.once.visited) ? state.once.visited : [];
-      if (!state.daily || state.daily.date !== localDateKey()) state.daily = freshDaily();
-      state.daily.progress = state.daily.progress || {};
-      state.daily.claimed = state.daily.claimed || {};
-      state.daily.visited = Array.isArray(state.daily.visited) ? state.daily.visited : [];
+      ["daily", "weekly", "monthly"].forEach(frequency => {
+        if (!state[frequency] || state[frequency].date !== periodKey(frequency)) {
+          state[frequency] = freshPeriod(frequency);
+        }
+        state[frequency].progress = state[frequency].progress || {};
+        state[frequency].claimed = state[frequency].claimed || {};
+        state[frequency].visited = Array.isArray(state[frequency].visited) ? state[frequency].visited : [];
+      });
       return state;
     } catch {
       return {
@@ -99,7 +118,10 @@
   }
 
   function bucketFor(quest) {
-    return quest.frequency === "once" ? state.once : state.daily;
+    const frequency = ["daily", "weekly", "monthly", "once"].includes(quest.frequency)
+      ? quest.frequency
+      : "daily";
+    return frequency === "once" ? state.once : state[frequency];
   }
 
   function questProgress(quest) {
@@ -232,56 +254,86 @@
     if (!container) return;
     container.replaceChildren();
 
-    quests.forEach(quest => {
-      const card = document.createElement("article");
-      card.className = "quest-card";
-      card.dataset.questId = quest.id;
+    const groups = [
+      { frequency: "daily", title: "Daily" },
+      { frequency: "weekly", title: "Weekly" },
+      { frequency: "monthly", title: "Monthly" },
+      { frequency: "once", title: "One-Time" }
+    ];
 
-      const top = document.createElement("div");
-      top.className = "quest-card-top";
-      const frequency = document.createElement("span");
-      frequency.className = "quest-frequency";
-      frequency.textContent = quest.frequency === "once" ? "ONE-TIME" : "DAILY";
-      const stateLabel = document.createElement("span");
-      stateLabel.dataset.questState = "";
+    groups.forEach(group => {
+      const groupQuests = quests.filter(quest => (quest.frequency || "daily") === group.frequency);
+      const section = document.createElement("section");
+      section.className = "quest-group";
       const heading = document.createElement("h3");
-      heading.textContent = quest.title;
-      const description = document.createElement("p");
-      description.textContent = quest.description;
-      const progressLine = document.createElement("div");
-      progressLine.className = "quest-progress-line";
-      const progress = document.createElement("span");
-      progress.dataset.questProgress = "";
-      const progressTrack = document.createElement("div");
-      progressTrack.className = "progress-track";
-      progressTrack.setAttribute("role", "progressbar");
-      progressTrack.setAttribute("aria-label", quest.title + " progress");
-      progressTrack.setAttribute("aria-valuemin", "0");
-      progressTrack.setAttribute("aria-valuemax", String(quest.target));
-      const progressFill = document.createElement("span");
-      progressFill.className = "progress-fill";
-      progressFill.dataset.progressFill = "";
-      progressTrack.append(progressFill);
-      progressLine.append(progress);
-      top.append(frequency, stateLabel);
-      const reward = document.createElement("strong");
-      reward.className = "quest-reward";
-      reward.textContent = "+" + quest.reward + " BB";
-      const button = document.createElement("button");
-      button.addEventListener("click", () => {
-        if (questProgress(quest) < quest.target || isClaimed(quest)) return;
-        bucketFor(quest).claimed[quest.id] = true;
-        state.balance += quest.reward;
-        state.lifetimeEarned += quest.reward;
-        save();
-        updateQuestCards();
-        renderShop();
-        renderAchievements();
-      });
+      heading.className = "quest-group-heading";
+      heading.textContent = group.title;
+      section.append(heading);
 
-      card.append(top, heading, description, progressLine, progressTrack, reward, button);
-      container.append(card);
-      updateQuestCard(quest);
+      if (groupQuests.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "quest-group-empty";
+        empty.textContent = "No quests yet.";
+        section.append(empty);
+      } else {
+        const grid = document.createElement("div");
+        grid.className = "card-grid quest-group-grid";
+
+        groupQuests.forEach(quest => {
+          const card = document.createElement("article");
+          card.className = "quest-card";
+          card.dataset.questId = quest.id;
+
+          const top = document.createElement("div");
+          top.className = "quest-card-top";
+          const frequency = document.createElement("span");
+          frequency.className = "quest-frequency";
+          frequency.textContent = group.title.toUpperCase();
+          const stateLabel = document.createElement("span");
+          stateLabel.dataset.questState = "";
+          const heading = document.createElement("h3");
+          heading.textContent = quest.title;
+          const description = document.createElement("p");
+          description.textContent = quest.description;
+          const progressLine = document.createElement("div");
+          progressLine.className = "quest-progress-line";
+          const progress = document.createElement("span");
+          progress.dataset.questProgress = "";
+          const progressTrack = document.createElement("div");
+          progressTrack.className = "progress-track";
+          progressTrack.setAttribute("role", "progressbar");
+          progressTrack.setAttribute("aria-label", quest.title + " progress");
+          progressTrack.setAttribute("aria-valuemin", "0");
+          progressTrack.setAttribute("aria-valuemax", String(quest.target));
+          const progressFill = document.createElement("span");
+          progressFill.className = "progress-fill";
+          progressFill.dataset.progressFill = "";
+          progressTrack.append(progressFill);
+          progressLine.append(progress);
+          top.append(frequency, stateLabel);
+          const reward = document.createElement("strong");
+          reward.className = "quest-reward";
+          reward.textContent = "+" + quest.reward + " BB";
+          const button = document.createElement("button");
+          button.addEventListener("click", () => {
+            if (questProgress(quest) < quest.target || isClaimed(quest)) return;
+            bucketFor(quest).claimed[quest.id] = true;
+            state.balance += quest.reward;
+            state.lifetimeEarned += quest.reward;
+            save();
+            updateQuestCards();
+            renderShop();
+            renderAchievements();
+          });
+
+          card.append(top, heading, description, progressLine, progressTrack, reward, button);
+          grid.append(card);
+          updateQuestCard(quest);
+        });
+
+        section.append(grid);
+      }
+      container.append(section);
     });
   }
 
