@@ -33,12 +33,19 @@
     updateBalance();
   }
 
+  function cleanPath(value) {
+    let path = value.toLowerCase();
+    if (path.endsWith("/")) path = path.slice(0, -1);
+    if (path.endsWith(".html")) path = path.slice(0, -5);
+    return path;
+  }
+
   function currentPage() {
-    const path = location.pathname.replace(/\\/$/, "").toLowerCase();
-    if (!path || path === "/index.html") return "home";
-    if (path === "/about" || path === "/about.html") return "about";
-    if (path === "/rewards" || path === "/rewards.html") return "rewards";
-    return path.split("/").pop().replace(/\\.html$/, "");
+    const path = cleanPath(location.pathname);
+    if (!path || path === "/index") return "home";
+    if (path === "/about") return "about";
+    if (path === "/rewards") return "rewards";
+    return path.split("/").pop();
   }
 
   function updateBalance() {
@@ -87,10 +94,10 @@
   function recordLinkClick(event) {
     const link = event.target.closest("a[href]");
     if (!link) return;
-    const target = new URL(link.href, location.href).pathname.replace(/\\/$/, "").toLowerCase();
-    const page = target.endsWith("/about") || target.endsWith("/about.html") ? "about"
-      : target.endsWith("/rewards.html") || target.endsWith("/rewards") ? "rewards"
-      : target === "/" || target.endsWith("/index.html") ? "home" : target.split("/").pop();
+    const target = cleanPath(new URL(link.href, location.href).pathname);
+    const page = target === "/about" ? "about"
+      : target === "/rewards" ? "rewards"
+      : target === "" || target === "/index" ? "home" : target.split("/").pop();
     quests.forEach(quest => {
       if (quest.type === "click_link" && quest.page === page) {
         const bucket = bucketFor(quest);
