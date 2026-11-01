@@ -1,21 +1,42 @@
 (() => {
   const STORAGE_KEY = "hfb-bugbucks-v1";
-  const today = new Date().toLocaleDateString("en-CA");
-  const freshDaily = () => ({ date: today, progress: {}, claimed: {}, visited: [] });
+
+  function localDateKey() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return year + "-" + month + "-" + day;
+  }
+
+  const freshDaily = () => ({ date: localDateKey(), progress: {}, claimed: {}, visited: [] });
 
   function loadState() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      const state = saved && typeof saved === "object" ? saved : {};
-      state.balance = Number.isFinite(state.balance) ? state.balance : 0;
-      state.lifetimeEarned = Number.isFinite(state.lifetimeEarned) ? state.lifetimeEarned : 0;
+      const state = saved && typeof saved === "object" && !Array.isArray(saved) ? saved : {};
+      state.balance = Number.isFinite(state.balance) ? Math.max(0, state.balance) : 0;
+      state.lifetimeEarned = Number.isFinite(state.lifetimeEarned) ? Math.max(0, state.lifetimeEarned) : 0;
       state.inventory = Array.isArray(state.inventory) ? state.inventory : [];
-      state.activeItem = state.activeItem || "";
-      state.once = state.once || { progress: {}, claimed: {} };
-      if (!state.daily || state.daily.date !== today) state.daily = freshDaily();
+      state.activeItem = typeof state.activeItem === "string" ? state.activeItem : "";
+      state.once = state.once && typeof state.once === "object" ? state.once : {};
+      state.once.progress = state.once.progress || {};
+      state.once.claimed = state.once.claimed || {};
+      state.once.visited = Array.isArray(state.once.visited) ? state.once.visited : [];
+      if (!state.daily || state.daily.date !== localDateKey()) state.daily = freshDaily();
+      state.daily.progress = state.daily.progress || {};
+      state.daily.claimed = state.daily.claimed || {};
+      state.daily.visited = Array.isArray(state.daily.visited) ? state.daily.visited : [];
       return state;
     } catch {
-      return { balance: 0, lifetimeEarned: 0, inventory: [], activeItem: "", once: { progress: {}, claimed: {} }, daily: freshDaily() };
+      return {
+        balance: 0,
+        lifetimeEarned: 0,
+        inventory: [],
+        activeItem: "",
+        once: { progress: {}, claimed: {}, visited: [] },
+        daily: freshDaily()
+      };
     }
   }
 
@@ -23,13 +44,18 @@
   let quests = [];
   let shop = [];
   let achievements = [];
-  let renderTimer = null;
+  let lastTick = Date.now();
+  let secondsSinceSave = 0;
 
   function save() {
     quests.forEach(quest => {
       if (quest.type === "lifetime_earned") setProgress(quest, state.lifetimeEarned);
     });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (error) {
+      console.warn("BugBucks could not save this browser's data.", error);
+    }
     updateBalance();
   }
 
@@ -49,8 +75,9 @@
   }
 
   function updateBalance() {
-    document.querySelectorAll("#bugbucks-balance").forEach(el => {
-      el.textContent = state.balance + " BB";
+    const text = state.balance + " BB";
+    document.querySelectorAll("#bugbucks-balance, #wallet-balance").forEach(el => {
+      if (el.textContent !== text) el.textContent = text;
     });
   }
 
@@ -72,16 +99,33 @@
     bucket.progress[quest.id] = Math.max(Number(bucket.progress[quest.id] || 0), value);
   }
 
+  function updateQuestCard(quest) {
+    const card = document.querySelector('[data-quest-id="' + quest.id + '"]');
+    if (!card) return;
+    const progress = questProgress(quest);
+    const claimed = isClaimed(quest);
+    const complete = progress >= quest.target;
+    const progressText = card.querySelector("[data-quest-progress]");
+    const button = card.querySelector("button");
+    const shownProgress = quest.type === "time_on_site"
+      ? Math.min(progress, quest.target) + " / " + quest.target + " seconds"
+      : Math.min(progress, quest.target) + " / " + quest.target;
+    progressText.textContent = claimed ? "Reward claimed" : shownProgress;
+    button.textContent = claimed ? "Claimed" : complete ? "Claim reward" : "In progress";
+    button.disabled = !complete || claimed;
+  }
+
+  function updateQuestCards() {
+    quests.forEach(updateQuestCard);
+  }
+
   function recordPageVisit() {
     const page = currentPage();
     if (!state.daily.visited.includes(page)) state.daily.visited.push(page);
-    if (!state.once.visited) state.once.visited = [];
     if (!state.once.visited.includes(page)) state.once.visited.push(page);
 
     quests.forEach(quest => {
-      if (quest.type === "visit_page" && quest.page === page) {
-        setProgress(quest, 1);
-      }
+      if (quest.type === "visit_page" && quest.page === page) setProgress(quest, 1);
       if (quest.type === "visit_pages") {
         const visited = quest.frequency === "once" ? state.once.visited : state.daily.visited;
         const count = quest.pages.filter(required => visited.includes(required)).length;
@@ -94,78 +138,112 @@
   function recordLinkClick(event) {
     const link = event.target.closest("a[href]");
     if (!link) return;
-    const target = cleanPath(new URL(link.href, location.href).pathname);
+    let target;
+    try {
+      target = cleanPath(new URL(link.href, location.href).pathname);
+    } catch {
+      return;
+    }
     const page = target === "/about" ? "about"
       : target === "/rewards" ? "rewards"
-      : target === "" || target === "/index" ? "home" : target.split("/").pop();
+      : target === "" || target === "/" || target === "/index" ? "home"
+      : target.split("/").pop();
+    let changed = false;
     quests.forEach(quest => {
       if (quest.type === "click_link" && quest.page === page) {
         const bucket = bucketFor(quest);
         bucket.progress[quest.id] = Number(bucket.progress[quest.id] || 0) + 1;
+        changed = true;
       }
     });
-    save();
+    if (changed) {
+      save();
+      updateQuestCards();
+    }
   }
 
   function startTimeTracking() {
-    let last = Date.now();
-    renderTimer = setInterval(() => {
+    window.setInterval(() => {
       const now = Date.now();
-      const elapsed = Math.min(Math.floor((now - last) / 1000), 5);
-      last = now;
-      if (document.visibilityState !== "visible" || elapsed <= 0) return;
+      if (document.visibilityState !== "visible") {
+        lastTick = now;
+        return;
+      }
+      const elapsed = Math.min(Math.floor((now - lastTick) / 1000), 5);
+      lastTick = now;
+      if (elapsed <= 0) return;
+
+      let changed = false;
       quests.forEach(quest => {
-        if (quest.type === "time_on_site") {
+        if (quest.type === "time_on_site" && !isClaimed(quest)) {
           setProgress(quest, questProgress(quest) + elapsed);
+          updateQuestCard(quest);
+          changed = true;
         }
       });
-      save();
-      if (currentPage() === "rewards") renderQuests();
+
+      if (changed) {
+        secondsSinceSave += elapsed;
+        if (secondsSinceSave >= 10) {
+          secondsSinceSave = 0;
+          save();
+        }
+      }
     }, 1000);
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") {
+        save();
+        secondsSinceSave = 0;
+      } else {
+        lastTick = Date.now();
+      }
+    });
+    window.addEventListener("pagehide", save);
   }
 
   function renderQuests() {
     const container = document.getElementById("quest-list");
     if (!container) return;
-    container.innerHTML = "";
+    container.replaceChildren();
+
     quests.forEach(quest => {
-      const progress = questProgress(quest);
-      const claimed = isClaimed(quest);
-      const complete = progress >= quest.target;
       const card = document.createElement("article");
       card.className = "quest-card";
+      card.dataset.questId = quest.id;
+
       const heading = document.createElement("h3");
       heading.textContent = quest.title;
       const description = document.createElement("p");
       description.textContent = quest.description;
-      const progressText = document.createElement("p");
-      const shownProgress = quest.type === "time_on_site" ? Math.min(progress, quest.target) + " / " + quest.target + " seconds" : Math.min(progress, quest.target) + " / " + quest.target;
-      progressText.className = "quest-progress";
-      progressText.textContent = claimed ? "Reward claimed" : shownProgress;
+      const progress = document.createElement("p");
+      progress.className = "quest-progress";
+      progress.dataset.questProgress = "";
       const reward = document.createElement("strong");
       reward.className = "quest-reward";
       reward.textContent = "+" + quest.reward + " BB";
       const button = document.createElement("button");
-      button.textContent = claimed ? "Claimed" : complete ? "Claim reward" : "In progress";
-      button.disabled = !complete || claimed;
       button.addEventListener("click", () => {
-        if (!complete || isClaimed(quest)) return;
+        if (questProgress(quest) < quest.target || isClaimed(quest)) return;
         bucketFor(quest).claimed[quest.id] = true;
         state.balance += quest.reward;
         state.lifetimeEarned += quest.reward;
         save();
-        renderQuests();
+        updateQuestCards();
         renderAchievements();
       });
-      card.append(heading, description, progressText, reward, button);
+
+      card.append(heading, description, progress, reward, button);
       container.append(card);
+      updateQuestCard(quest);
     });
   }
 
   function renderShop() {
     const container = document.getElementById("shop-list");
     if (!container) return;
-    container.innerHTML = "";
+    container.replaceChildren();
+
     shop.forEach(item => {
       const owned = state.inventory.includes(item.id);
       const active = state.activeItem === item.id;
@@ -176,6 +254,7 @@
       const description = document.createElement("p");
       description.textContent = item.description;
       const price = document.createElement("strong");
+      price.className = "shop-price";
       price.textContent = item.price + " BB";
       const button = document.createElement("button");
       button.textContent = active ? "Equipped" : owned ? "Equip" : "Buy";
@@ -198,16 +277,20 @@
   function renderAchievements() {
     const container = document.getElementById("achievement-list");
     if (!container) return;
-    container.innerHTML = "";
+    container.replaceChildren();
+
     achievements.forEach(item => {
       const unlocked = state.lifetimeEarned >= item.totalEarned;
       const card = document.createElement("article");
       card.className = "achievement-card" + (unlocked ? " unlocked" : "");
       const heading = document.createElement("h3");
-      heading.textContent = (unlocked ? "🏆 " : "🔒 ") + item.name;
+      heading.textContent = item.name;
       const description = document.createElement("p");
       description.textContent = item.description;
-      card.append(heading, description);
+      const status = document.createElement("span");
+      status.className = "achievement-status";
+      status.textContent = unlocked ? "Unlocked" : item.totalEarned + " BB earned";
+      card.append(heading, description, status);
       container.append(card);
     });
   }
@@ -218,9 +301,9 @@
       const response = await fetch("/quests.json");
       if (!response.ok) throw new Error("Could not load quests.json");
       const config = await response.json();
-      quests = config.quests || [];
-      shop = config.shop || [];
-      achievements = config.achievements || [];
+      quests = Array.isArray(config.quests) ? config.quests : [];
+      shop = Array.isArray(config.shop) ? config.shop : [];
+      achievements = Array.isArray(config.achievements) ? config.achievements : [];
       recordPageVisit();
       document.addEventListener("click", recordLinkClick);
       renderQuests();
@@ -229,7 +312,7 @@
       startTimeTracking();
     } catch (error) {
       const container = document.getElementById("quest-list");
-      if (container) container.textContent = "Couldn't load quests.json. Check that the file is published.";
+      if (container) container.textContent = "Couldn't load quests.json.";
       console.error(error);
     }
   }
@@ -238,7 +321,7 @@
     if (event.key === STORAGE_KEY) {
       state = loadState();
       updateBalance();
-      renderQuests();
+      updateQuestCards();
       renderShop();
       renderAchievements();
     }
