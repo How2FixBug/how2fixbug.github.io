@@ -83,13 +83,18 @@
 
   function updateCosmetics() {
     document.querySelectorAll(".player-name-tag").forEach(tag => tag.remove());
-    if (state.activeItem !== "blue-name") return;
+    const cosmetics = {
+      "blue-name": { text: "[ blue!! ]", className: "player-name-tag--blue", label: "Blue name tag" },
+      "bug-hunter": { text: "[ bug hunter ]", className: "player-name-tag--hunter", label: "Bug Hunter title" },
+      "golden-bug": { text: "[ The Golden Bug ]", className: "player-name-tag--golden", label: "The Golden Bug" }
+    };
+    const cosmetic = cosmetics[state.activeItem];
     const logo = document.querySelector(".topbar .logo");
-    if (!logo) return;
+    if (!cosmetic || !logo) return;
     const tag = document.createElement("span");
-    tag.className = "player-name-tag";
-    tag.textContent = "Roger";
-    tag.setAttribute("aria-label", "Equipped blue name tag");
+    tag.className = "player-name-tag " + cosmetic.className;
+    tag.textContent = cosmetic.text;
+    tag.setAttribute("aria-label", "Equipped " + cosmetic.label);
     logo.insertAdjacentElement("afterend", tag);
   }
 
