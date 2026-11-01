@@ -29,12 +29,14 @@ html, body {
     font-size: 24px;
     font-weight: bold;
     text-decoration: none;
+    font-family: "Fredoka One", sans-serif;
 }
 
 .topbar-links {
     display: flex;
     align-items: center;
     gap: 32px;
+    font-family: "Fredoka One", sans-serif;
 }
 
 .topbar-links a {
