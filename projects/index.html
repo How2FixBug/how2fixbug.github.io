@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Projects | How2FixBug</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/main.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a href="/" class="logo">How2FixBug</a>
+      <nav class="topbar-links">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/projects">Projects</a>
+      </nav>
+      <p id="view-count">Loading views...</p>
+    </header>
+    <h1 id="hello-text">Projects</h1>
+
+    <script data-goatcounter="https://how2fixbug.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+    <script>
+      fetch('https://how2fixbug.goatcounter.com/counter/TOTAL.json')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('view-count').textContent = data.count + ' Views';
+        })
+        .catch(() => {
+          document.getElementById('view-count').textContent = 'Views unavailable';
+        });
+    </script>
+  </body>
+</html>
