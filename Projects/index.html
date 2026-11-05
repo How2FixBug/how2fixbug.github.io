@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Projects | How2FixBug</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="projects.css">
@@ -15,7 +17,11 @@
       </nav>
       <p id="view-count">Loading views...</p>
     </header>
-    <h1 id="about-text">Projects</h1>
+
+    <main class="projects-page">
+      <h1 id="about-text">Projects</h1>
+      <section id="project-list" class="project-list" aria-label="My projects"></section>
+    </main>
 
     <script data-goatcounter="https://how2fixbug.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
@@ -29,5 +35,6 @@
           document.getElementById('view-count').textContent = 'Views unavailable';
         });
     </script>
+    <script src="projects.js"></script>
   </body>
 </html>
