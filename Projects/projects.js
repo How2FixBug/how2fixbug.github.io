@@ -14,7 +14,18 @@
 */
 
 const projects = [
-  // Add your project entries here.
+  {
+    title: "Clickstronomy",
+    description: "Click the asteroid to gain matter. Buy upgrades, and even fight the sun! Also, discontinued.",
+    url: "https://scratch.mit.edu/projects/1258035545/",
+    category: "Game"
+  }
+  {
+    title: "Clickstronomy 2",
+    description: "Buy upgrades to unlock clickers, upgrades to clickers, automation, and more!! Also, discontinued.",
+    url: "https://scratch.mit.edu/projects/1379867279/",
+    category: "Game"
+  }
 ];
 
 const projectList = document.querySelector("#project-list");
