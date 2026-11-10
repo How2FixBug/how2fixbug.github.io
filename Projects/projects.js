@@ -19,13 +19,13 @@ const projects = [
     description: "Click the asteroid to gain matter. Buy upgrades, and even fight the sun! Also, discontinued.",
     url: "https://scratch.mit.edu/projects/1258035545/",
     category: "Game"
-  }
+  },
   {
     title: "Clickstronomy 2",
     description: "Buy upgrades to unlock clickers, upgrades to clickers, automation, and more!! Also, discontinued.",
     url: "https://scratch.mit.edu/projects/1379867279/",
     category: "Game"
-  }
+  },
   {
     title: "Taravo",
     description: "A gaming hub I'm making cuz I'm bored at school during free-time.",
