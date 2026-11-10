@@ -26,6 +26,12 @@ const projects = [
     url: "https://scratch.mit.edu/projects/1379867279/",
     category: "Game"
   }
+  {
+    title: "Taravo",
+    description: "A gaming hub I'm making cuz I'm bored at school during free-time.",
+    url: "https://how2fixbug.github.io/taravo/",
+    category: "Game Hub"
+  }
 ];
 
 const projectList = document.querySelector("#project-list");
